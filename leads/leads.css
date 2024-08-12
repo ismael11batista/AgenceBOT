@@ -9,7 +9,7 @@
 
 html {
     font-size: 16px;
-    zoom: 0.9;
+    zoom: 0.7;
     font-family: 'Roboto', sans-serif;
     height: 100%;
     /* Garante que o html e o body ocupem pelo menos a altura total da tela */
@@ -149,7 +149,7 @@ textarea {
 }
 
 .btn-adicionar3 {
-    min-width: 180px;
+    min-width: 480px;
 }
 
 
@@ -282,7 +282,7 @@ button:hover {
 .containerLeadAutomatico,
 .detalhes-lead {
     background-color: transparent;
-    height: 50px;
+    height: 250px;
     align-items: center;
     text-align: center;
     color: rgba(255, 255, 255, 0.605);
@@ -354,7 +354,7 @@ button:hover {
 .info-principal {
 
     padding-right: 10%;
-    overflow: hidden;
+
 }
 
 .consultores {
