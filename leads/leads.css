@@ -9,7 +9,7 @@
 
 html {
     font-size: 16px;
-    zoom: 0.58;
+    zoom: 1;
     font-family: 'Roboto', sans-serif;
     height: 100%;
     /* Garante que o html e o body ocupem pelo menos a altura total da tela */
@@ -160,7 +160,7 @@ textarea {
     justify-content: space-around;
     gap: 20px;
     width: 80%;
-    margin-top: 120px;
+    margin-top: 20px;
 }
 
 /* Estilo para o botão de Voltar à Homepage */
