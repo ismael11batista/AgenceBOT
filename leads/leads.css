@@ -160,7 +160,7 @@ textarea {
     justify-content: space-around;
     gap: 20px;
     width: 80%;
-    margin-top: 120px;
+    margin-top: 20px;
 }
 
 /* Estilo para o botão de Voltar à Homepage */
@@ -352,9 +352,9 @@ button:hover {
 }
 
 .info-principal {
-
     padding-right: 10%;
-
+    overflow: hidden;
+    max-height: 100px;
 }
 
 .consultores {
