@@ -90,7 +90,7 @@ textarea {
     border: 5px solid rgba(255, 255, 255, 0.605);
     border-radius: 10px;
     resize: none;
-    height: 280px;
+    height: 150px;
     margin-bottom: 15px;
 
 }
@@ -128,12 +128,12 @@ textarea {
 
 
 .btn-adicionar {
-    min-width: 150px;
+    min-width: 10px;
     margin-top: 0px;
 }
 
 .btn-adicionar2 {
-    min-width: 180px;
+    min-width: 10px;
     margin-top: 0px;
 }
 
@@ -143,13 +143,13 @@ textarea {
 }
 
 .button-icon {
-    width: 24px;
+    width: 2px;
     height: 24px;
     margin-right: 15px; /* Aumenta o espaço entre o ícone e o texto */
 }
 
 .btn-adicionar3 {
-    min-width: 480px;
+    min-width: 20px;
 }
 
 
@@ -357,21 +357,7 @@ button:hover {
     max-height: 100px;
 }
 
-.consultores {
-    display: flex;
-    max-width: 1900px;
-    flex-direction: row;
-    /* Corrigido de 'line' para 'row' */
-    justify-content: space-around;
-    gap: 0%;
-    margin-top: 20px;
-    align-items: baseline;
-    /* Corrigido de 'first baseline' para 'baseline' */
-    flex: 1;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 30px;
-}
+
 
 .column {
     flex: 1;
@@ -401,7 +387,7 @@ button:hover {
 .ChatGPT-btn {
     position: fixed;
     display: flex;
-    right: 3%;
+    right: 5%;
     top: 80%;
     width: auto;
     height: 65px;
@@ -419,8 +405,8 @@ button:hover {
 .whatsapp-btn {
     position: fixed;
     display: flex;
-    right: 3%;
-    top: 90%;
+    right: 5%;
+    top: 70%;
     width: auto;
     height: 60px;
     z-index: 1;
@@ -438,7 +424,7 @@ button:hover {
 .copy-btn {
     position: fixed;
     display: flex;
-    left: 3%;
+    left: 5%;
     width: auto;
     height: 60px;
     z-index: 1;
@@ -451,11 +437,11 @@ button:hover {
 
 /* Posicionamento específico para cada botão de cópia */
 #copiarS2 .copy-btn {
-    top: 92%; /* Ajuste este valor conforme necessário */
+    top: 70%; /* Ajuste este valor conforme necessário */
     height: 32px;
 
 }
 
 #copiarS4 .copy-btn {
-    top: 82%; /* Ajuste este valor conforme necessário */
+    top: 78%; /* Ajuste este valor conforme necessário */
 }

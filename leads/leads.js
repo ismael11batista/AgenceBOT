@@ -510,17 +510,62 @@ function obterInteresse(texto) {
     return interesse;
 }
 
-// Função interna para identificar o porte da empresa
-function obterPorte(texto) {
-    const porteRegex = /icone Porte(.*?)icone Quantidade de Funcionários/s;
-    const porteMatch = texto.match(porteRegex);
 
-    if (porteMatch && porteMatch[1]) {
-        let porteTexto = porteMatch[1].replace("Porte", "").trim();
-        return `Porte da Empresa: ${porteTexto}`;
-    } else {
-        return "Porte da Empresa: Pequeno"; // Valor padrão caso o porte não seja encontrado
+function obterPorte(texto) {
+    const linhas = texto.split('\n');
+    const portesValidos = ['Micro', 'Pequeno', 'Médio', 'Grande', 'Individual', 'Desconhecido'];
+
+    for (let i = 0; i < linhas.length - 1; i++) {
+        if (linhas[i].trim() === 'Porte') {
+            const portePotencial = linhas[i + 1].trim();
+            if (portesValidos.includes(portePotencial)) {
+                return `Porte da Empresa: ${portePotencial}`;
+            }
+        }
     }
+
+    return "Porte da Empresa: não informado";
+}
+
+// Função para obter a quantidade de funcionários
+function obterQuantidadeFuncionarios(texto) {
+    const funcionariosRegexes = [
+        /Quantidade de Funcionários\s*([^<\n]+)/i,
+        /(\d+\s*a\s*\d+)\s*funcionários/i,
+        /Quantidade de Funcionários:(.*?)icone/s
+    ];
+
+    for (let regex of funcionariosRegexes) {
+        const match = texto.match(regex);
+        if (match && match[1]) {
+            // Remove a palavra "funcionários" e espaços extras do final
+            let quantidade = match[1].replace(/\s*funcionários\s*$/, '').trim();
+            return `Número de Funcionários: ${quantidade}`;
+        }
+    }
+
+    return "Número de Funcionários: não informado";
+}
+
+function obterFaturamentoAnual(texto) {
+    const faturamentoRegexes = [
+        /Faturamento Anual\s*([^<\n]+)/i,
+        /Faturamento Anual:(.*?)(?:icone|$)/s,
+        /Faturamento Anual\s*:\s*([^<\n]+)/i
+    ];
+
+    for (let regex of faturamentoRegexes) {
+        const match = texto.match(regex);
+        if (match && match[1]) {
+            let faturamento = match[1].trim();
+            if (faturamento.toLowerCase() === 'desconhecido') {
+                return "Faturamento Anual: Desconhecido";
+            }
+            return `Faturamento Anual: ${faturamento}`;
+        }
+    }
+
+    return "Faturamento Anual: não informado";
 }
 
 // Função principal que identifica as informações automaticamente
@@ -601,42 +646,22 @@ document.addEventListener('DOMContentLoaded', function () {
 // Função principal para obter todas as informações e retornar a string infoEconodata
 function obterEconodata(texto) {
     let infoEconodata = "";
-
     // Definindo as expressões regulares para cada tipo de informação
     const cnpjRegex = /CNPJ: (\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2})/i;
-    const porteRegex = /icone Porte(.*?)icone Quantidade de Funcionários/s;
-    const numeroFuncionariosRegex = /Quantidade de Funcionários(.*?)icone like/s;
-    const faturamentoAnualRegex = /Faturamento Anual(.*?)icone like/s;
-
     // Procurando pelo CNPJ no texto
     const cnpjMatch = texto.match(cnpjRegex);
 
     // Se o CNPJ for encontrado, adiciona as informações à string infoEconodata
     if (cnpjMatch) {
         infoEconodata += `CNPJ: ${cnpjMatch[1]}\n`;
-
-        const porteMatch = texto.match(porteRegex);
-        if (porteMatch) {
-            const porteTexto = porteMatch[1].replace("Porte", "").trim();
-            infoEconodata += `Porte da Empresa: ${porteTexto}\n`;
-        }
-
-        const numeroFuncionariosMatch = texto.match(numeroFuncionariosRegex);
-        if (numeroFuncionariosMatch) {
-            let numeroFuncionariosTexto = numeroFuncionariosMatch[1].replace("Quantidade de Funcionários", "").trim();
-            numeroFuncionariosTexto = numeroFuncionariosTexto.replace("funcionários", "").trim();
-            infoEconodata += `Número de Funcionários: ${numeroFuncionariosTexto}\n`;
-        }
-
-        const faturamentoAnualMatch = texto.match(faturamentoAnualRegex);
-        if (faturamentoAnualMatch) {
-            let faturamentoAnualTexto = faturamentoAnualMatch[1].replace("Faturamento Anual", "").trim();
-            infoEconodata += `Faturamento Anual: ${faturamentoAnualTexto}`;
-        }
+        infoEconodata += obterPorte(texto) + "\n";
+        infoEconodata += obterQuantidadeFuncionarios(texto) + "\n";
+        infoEconodata += obterFaturamentoAnual(texto);
     }
 
     return infoEconodata.trim();
 }
+
 
 // Função principal que identifica informações adicionais e exibe no HTML
 function obterInformacoesEconodata() {
@@ -741,7 +766,7 @@ function formatarPromptGPT() {
     let EmailFormatado = obterEmail(texto)
 
     let siteDaEmpresa = EmailFormatado.split("@")[1];
-    siteDaEmpresa = "https://www." + siteDaEmpresa;
+    siteDaEmpresa = "www." + siteDaEmpresa;
 
     let assuntoFormatado = obterAssunto(texto)
 
@@ -750,6 +775,8 @@ function formatarPromptGPT() {
 Além disso, e segundo meu contexto como potencial fornecedor de ${interesse}, e sabendo que é esse o serviço desejado por essa empresa, quais seriam as 5 melhores perguntas que posso fazer a eles nessa primeira reunião que terei com eles. Considere também que esse lead da empresa ${NomeDaEmpresa} chegou com o seguinte texto no formulário do fale conosco: "${assuntoFormatado}"
 
 Quais são os principais clientes e concorrentes diretos da ${NomeDaEmpresa}? E o que estão fazendo de inovação nesse ramo que sou potencial fornecedor.
+
+Considerando esse contexto e o cenário que temos aqui, que tipos de perguntas poderíamos fazer a eles? Além disso, quais perguntas eles poderiam nos fazer, e quais seriam boas respostas que poderíamos oferecer?
 
 Por favor me dê isso tudo em português do Brasil, o texto deve ser formatado de forma limpa e direta, sem o uso de cabeçalhos ou marcadores especiais, sem qualquer tipo de aspas ou caracteres que possam dar problema em códigos de sistemas.`;
 
